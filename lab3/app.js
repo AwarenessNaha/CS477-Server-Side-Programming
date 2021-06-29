@@ -22,29 +22,22 @@ server.on('request', (req, res) => {
         res.write('<head><title>Enter Message</title></head>');
         res.write('<body><form action="/messsage" method="POST">Enter Message: <input name="message"><button type="submit">Send</button></form></body>');
         res.write('</html>');
-     res.end(); // "retrun" here exits the function execution, otherwise continue.
+        res.end(); // "retrun" here exits the function execution, otherwise continue.
     }
     else if (url === '/messsage' && method === 'POST') {
         const body = [];
         req.on('data', (chunk) => {
-            body.push(chunk);
+            body.push(chunk); // body now is a Buffer 
         });
         req.on('end', () => {
-            const parsedBody = Buffer.concat(body).toString();
+            const parsedBody = Buffer.concat(body).toString(); // to concat the buffer and transfer it to string
             console.log(parsedBody);
-            fs.writeFileSync('message.txt', parsedBody.split('=')[1]);
+            fs.writeFileSync('message.txt', parsedBody.split('=')[1]);//
         });
 
-        res.statusCode = 302;
-        res.setHeader("Location", "/");
+        res.statusCode = 302; // status code for redirecting  
+        res.setHeader("Location", "/"); // 
         res.end();
-    } else{
-    res.setHeader('Content-Type', 'text/html');
-    res.write('<html>');
-    res.write('<head><title>My First Page</title></head>');
-    res.write('<body><h1>Hellow from Node.js</h1></body>');
-    res.write('</html>');
-    res.end();
     }
 });
 
